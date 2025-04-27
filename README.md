@@ -8,7 +8,7 @@
 - **Backend**: AWS API Gateway (HTTP API) exposed publicly, connected to VPC Link.
 - **VPC Link**: Connects API Gateway to an internal ALB.
 - **Internal ALB**: Routes traffic to ECS services deployed in private subnets.
-- **ECS Services**: Backend microservices (auth-service, order-service, inventory-service) deployed inside ECS, running on Fargate/EC2.
+- **ECS Services**: Backend microservices (eShop, Pharmacy & Doctor) deployed inside ECS, running on Fargate/EC2.
 - **Communication**:
   - Frontend to Backend: Via API Gateway.
   - Backend to Backend: Via internal ALB using path-based routing.
@@ -21,7 +21,21 @@
 | ECS for Backend        | Slightly higher cost (for Fargate) | No server management, easy scaling, can be switch to EC2 if needed |
 | Internal ALB           | -                                  | Secure private routing and health checks                           |
 | Private Subnets        | -                                  | Maximum backend security                                           |
-| Vercel Frontend        | Separate hosting                   | Best-in-class frontend CDN and performance                         |
+
+---
+
+## Database
+
+- **Database**: AWS RDS (MySQL/Postgres) deployed in private subnets.
+- **Connectivity**:
+  - ECS Tasks (running in private subnets) securely connect to RDS via private VPC networking.
+  - No public access to RDS.
+  - Security Groups:
+    - ECS SG → RDS SG (port 3306/5432 open)
+    - RDS SG does not allow traffic from the internet.
+- **Credentials Management**:
+  - RDS credentials stored in AWS Secrets Manager (or SSM Parameter Store).
+  - Applications fetch secrets dynamically without hardcoding DB passwords.
 
 ---
 
