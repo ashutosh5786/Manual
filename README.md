@@ -20,7 +20,7 @@
 | API Gateway + VPC Link | Slight cost and config overhead    | Strong security and scalability                                    |
 | ECS for Backend        | Slightly higher cost (for Fargate) | No server management, easy scaling, can be switch to EC2 if needed |
 | Internal ALB           | -                                  | Secure private routing and health checks                           |
-| Private Subnets        | -                                  | Maximum backend security                                           |
+| Private Subnets        | Use of NAT Gateway increases bills | Maximum backend security                                           |
 
 ---
 
