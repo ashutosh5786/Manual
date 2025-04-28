@@ -115,3 +115,60 @@
   - Monthly cloud spend analysis.
 
 ---
+
+## CI/CD Pipeline Overview
+
+### Project Structure
+
+Only deploy.yml is present in this repository as cicd.yml
+
+```bash
+  / (root)
+  ├── index.php             # Main PHP backend file
+  ├── Dockerfile            # Docker image build instructions
+  ├── composer.json         # PHP dependencies (PHPUnit)
+  ├── phpunit.xml           # PHPUnit configuration
+  ├── /tests                # Basic test case
+  │    └── HealthCheckTest.php
+  ├── /deploy               # Deployment files
+  │    └── ecs-task-def.json
+  └── /.github
+      └── /workflows
+          └── deploy.yml   # GitHub Actions CI/CD workflow
+```
+
+### How the CI/CD Pipeline Works
+
+**1. Trigger:** On push to the main branch.
+
+**2. Lint & Test:**
+
+- Install PHP dependencies.
+
+- Run PHPUnit unit tests.
+
+**3. Build & Push Docker Image:**
+
+- Build the PHP backend image using Docker.
+
+- Push the image to Amazon ECR.
+
+**4. Update Task Definition:**
+
+- Inject the newly built image into ECS task definition.
+
+**5. Deploy to ECS:**
+
+- Update the ECS service to use the latest task definition.
+
+- Force new deployment and wait for service stability.
+
+## GitHub Actions Workflow
+
+- Configure AWS Credentials using GitHub OIDC and IAM Role.
+
+- CloudWatch Logs are configured using awslogs driver.
+
+- Service Update automatically triggers a new ECS deployment.
+
+---
